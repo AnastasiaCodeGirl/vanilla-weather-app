@@ -19,6 +19,8 @@ li{
   padding: 0;
   font-size: 16px;
   line-height: 19px;
+}
+li::first-letter{
   text-transform: capitalize;
 }
   .weather-app{
