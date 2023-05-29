@@ -28,6 +28,7 @@ function displayTemperature(response) {
 	let windElement = document.querySelector("#wind");
 	let dateElement = document.querySelector("#date");
 	let iconElement = document.querySelector("#icon");
+	celsiusTemperature = response.data.temperature.current;
 	temperatureElement.innerHTML = Math.round(response.data.temperature.current);
 	cityElement.innerHTML = response.data.city;
 	descriptionElement.innerHTML = response.data.condition.description;
@@ -42,12 +43,35 @@ function search(city) {
 	let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
 	axios.get(apiUrl).then(displayTemperature);
 }
+function displayFahrenheitTemperature(event) {
+	event.preventDefault();
+	//add the active link to the celsius link
+	celsiusLink.classList.remove("active");
+	fahrenheitLink.classList.add("active");
+	fahrenheitTemperature = (celsiusTemperature * 9) / 5 + 32;
+	let temperatureElement = document.querySelector("#temperature");
+	temperatureElement.innerHTML = Math.round(fahrenheitTemperature);
+}
+function displayCelsiusTemperature(event) {
+	event.preventDefault();
+	//remove the active link from celsius link
+	fahrenheitLink.classList.remove("active");
+	celsiusLink.classList.add("active");
+	let temperatureElement = document.querySelector("#temperature");
+	temperatureElement.innerHTML = Math.round(celsiusTemperature);
+}
 function handleSubmit(event) {
 	event.preventDefault();
 	let cityInputElement = document.querySelector("#city-input");
 	let city = cityInputElement.value;
-	search(cityInputElement.value);
+	search(city);
 }
-search("Amsterdam");
 let form = document.querySelector("#search-form");
 form.addEventListener("submit", handleSubmit);
+let fahrenheitLink = document.querySelector("#fahrenheit-link");
+fahrenheitLink.addEventListener("click", displayFahrenheitTemperature);
+let celsiusLink = document.querySelector("#celsius-link");
+celsiusLink.addEventListener("click", displayCelsiusTemperature);
+let celsiusTemperature = null;
+let fahrenheitTemperature = null;
+search("Amsterdam");
